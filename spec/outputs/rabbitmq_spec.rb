@@ -11,6 +11,7 @@ describe LogStash::Outputs::RabbitMQ do
   let(:exchange) { "myexchange" }
   let(:key) { "mykey" }
   let(:persistent) { true }
+  let(:publish_confirm) { false }
   let(:settings) {
     {
       "host" => host,

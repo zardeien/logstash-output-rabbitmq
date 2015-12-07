@@ -64,6 +64,9 @@ class LogStash::Outputs::RabbitMQ < LogStash::Outputs::Base
 
   # Time in seconds to wait before retrying a connection
   config :connect_retry_interval, :validate => :number, :default => 1
+  
+  # Publish Confrim
+  config :publish_confirm, :validate => :boolean, :default => false
 
   def initialize(params)
     params["codec"] = "json" if !params["codec"]
@@ -139,7 +142,7 @@ class LogStash::Outputs::RabbitMQ < LogStash::Outputs::Base
     connection.on_unblocked { @logger.warn("RabbitMQ output unblocked!") }
 
     channel = connection.create_channel
-    channel.confirm_select
+    channel.confirm_select if @publish_confirm
     @logger.info("Connected to RabbitMQ at #{settings[:host]}")
 
     exchange = declare_exchange!(channel)
