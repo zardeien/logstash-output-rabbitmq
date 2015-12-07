@@ -139,6 +139,7 @@ class LogStash::Outputs::RabbitMQ < LogStash::Outputs::Base
     connection.on_unblocked { @logger.warn("RabbitMQ output unblocked!") }
 
     channel = connection.create_channel
+    channel.confirm_select
     @logger.info("Connected to RabbitMQ at #{settings[:host]}")
 
     exchange = declare_exchange!(channel)
